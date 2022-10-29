@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetApi", "PetApi\PetApi.csproj", "{750194A8-7854-4BC0-8FC3-8128DDAE1848}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetApiTest", "PetApiTest\PetApiTest.csproj", "{21110374-FF0E-4D84-80DC-40EBE4621E93}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{750194A8-7854-4BC0-8FC3-8128DDAE1848}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{750194A8-7854-4BC0-8FC3-8128DDAE1848}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{750194A8-7854-4BC0-8FC3-8128DDAE1848}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{750194A8-7854-4BC0-8FC3-8128DDAE1848}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21110374-FF0E-4D84-80DC-40EBE4621E93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21110374-FF0E-4D84-80DC-40EBE4621E93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21110374-FF0E-4D84-80DC-40EBE4621E93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21110374-FF0E-4D84-80DC-40EBE4621E93}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
