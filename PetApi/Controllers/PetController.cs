@@ -49,5 +49,22 @@ namespace PetApi.Controllers
             pets.Find(item => item.Equals(pet)).Price = pet.Price;
             return pets.Find(item => item.Name == pet.Name);
         }
+        [HttpGet("getPetByType")]
+        public List<Pet> GetByType([FromQuery] string type)
+        {
+            return pets.FindAll(item => item.PetType.Equals(type));
+           
+        }
+        [HttpGet("getPetByRange")]
+        public List<Pet> GetByType([FromQuery] int upper, [FromQuery] int lower)
+        {
+            return pets.FindAll(item => item.Price > lower && item.Price < upper);
+
+        }
+        [HttpGet("getPetByAge")]
+        public List<Pet> GetByType([FromQuery] int age)
+        {
+            return pets.FindAll(item => item.Age == age);
+        }
     }
 }

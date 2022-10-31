@@ -115,4 +115,73 @@ public class PetController
         //then
         Assert.Equal(pet.Price, responseResult.Price);
     }
+    [Fact]
+    public async Task Should_return_selected_pets_when_get_pet_by_type()
+    {
+        //given
+        var application = new WebApplicationFactory<Program>();
+        var httpClient = application.CreateClient();
+        await httpClient.DeleteAsync("api/deleteAllPets");
+        var pet = new Pet(name: "dog", type: "cat", age: 10, price: 1000);
+        var pet2 = new Pet(name: "dog", type: "cat", age: 10, price: 1000);
+        var serializeObject = JsonConvert.SerializeObject(pet);
+        var stringContent = new StringContent(serializeObject, Encoding.UTF8, "application/json");
+        await httpClient.PostAsync("api/addNewPet", stringContent);
+        serializeObject = JsonConvert.SerializeObject(pet2);
+        stringContent = new StringContent(serializeObject, Encoding.UTF8, "application/json");
+        await httpClient.PostAsync("api/addNewPet", stringContent);
+        //when
+        var response = await httpClient.GetAsync($"api/getPetByType?type={pet.PetType}");
+        response.EnsureSuccessStatusCode();
+        var readAsStringAsync = await response.Content.ReadAsStringAsync();
+        var savedPet = JsonConvert.DeserializeObject<List<Pet>>(readAsStringAsync);
+        //then
+        Assert.Equal(2, savedPet.Count);
+    }
+    [Fact]
+    public async Task Should_return_selected_pets_when_get_price_range()
+    {
+        //given
+        var application = new WebApplicationFactory<Program>();
+        var httpClient = application.CreateClient();
+        await httpClient.DeleteAsync("api/deleteAllPets");
+        var pet = new Pet(name: "dog", type: "cat", age: 10, price: 1000);
+        var pet2 = new Pet(name: "dog", type: "cat", age: 10, price: 1200);
+        var serializeObject = JsonConvert.SerializeObject(pet);
+        var stringContent = new StringContent(serializeObject, Encoding.UTF8, "application/json");
+        await httpClient.PostAsync("api/addNewPet", stringContent);
+        serializeObject = JsonConvert.SerializeObject(pet2);
+        stringContent = new StringContent(serializeObject, Encoding.UTF8, "application/json");
+        await httpClient.PostAsync("api/addNewPet", stringContent);
+        //when
+        var response = await httpClient.GetAsync($"api/getPetByRange?upper={1400}&lower={800}");
+        response.EnsureSuccessStatusCode();
+        var readAsStringAsync = await response.Content.ReadAsStringAsync();
+        var savedPet = JsonConvert.DeserializeObject<List<Pet>>(readAsStringAsync);
+        //then
+        Assert.Equal(2, savedPet.Count);
+    }
+    [Fact]
+    public async Task Should_return_selected_pets_when_get_by_age()
+    {
+        //given
+        var application = new WebApplicationFactory<Program>();
+        var httpClient = application.CreateClient();
+        await httpClient.DeleteAsync("api/deleteAllPets");
+        var pet = new Pet(name: "dog", type: "cat", age: 10, price: 1000);
+        var pet2 = new Pet(name: "dog", type: "cat", age: 10, price: 1200);
+        var serializeObject = JsonConvert.SerializeObject(pet);
+        var stringContent = new StringContent(serializeObject, Encoding.UTF8, "application/json");
+        await httpClient.PostAsync("api/addNewPet", stringContent);
+        serializeObject = JsonConvert.SerializeObject(pet2);
+        stringContent = new StringContent(serializeObject, Encoding.UTF8, "application/json");
+        await httpClient.PostAsync("api/addNewPet", stringContent);
+        //when
+        var response = await httpClient.GetAsync($"api/getPetByAge?age={pet.Age}");
+        response.EnsureSuccessStatusCode();
+        var readAsStringAsync = await response.Content.ReadAsStringAsync();
+        var savedPet = JsonConvert.DeserializeObject<List<Pet>>(readAsStringAsync);
+        //then
+        Assert.Equal(2, savedPet.Count);
+    }
 }
