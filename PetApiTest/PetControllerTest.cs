@@ -60,7 +60,9 @@ namespace PetApiTest
             await client.DeleteAsync("/api/deleteAllPets");
             //when
             var pet = new Pet("kitty", "cat", "white", 1000);
-            AddOnePet(client, pet);
+            var serialzeObject = JsonConvert.SerializeObject(pet);
+            var postBody = new StringContent(serialzeObject, Encoding.UTF8, "application/json");
+            await client.PostAsync("/api/addNewPet", postBody);
 
             var response = await client.GetAsync("/api/getOnePetByName?name=kitty");
             //then
@@ -139,11 +141,32 @@ namespace PetApiTest
             Assert.Equal(1, allCat.Count);
         }
 
-        public void AddOnePet(HttpClient client, Pet pet)
+        [Fact]
+        public async void Should_return_all_pets_between_prices_range()
         {
-            var serialzeObject = JsonConvert.SerializeObject(pet);
-            var postBody = new StringContent(serialzeObject, Encoding.UTF8, "application/json");
-            client.PostAsync("/api/addNewPet", postBody);
+            //given
+            var application = new WebApplicationFactory<Program>();
+            var client = application.CreateClient();
+            await client.DeleteAsync("/api/deleteAllPets");
+
+            var pet1 = new Pet("kitty", "cat", "white", 1000);
+            var pet2 = new Pet("Bob", "cat", "white", 1500);
+            var pet3 = new Pet("Ops", "cat", "white", 2000);
+            var petList = new List<Pet> { pet1, pet2, pet3 };
+            foreach (Pet pet in petList)
+            {
+                var serialzeObject = JsonConvert.SerializeObject(pet);
+                var postBody = new StringContent(serialzeObject, Encoding.UTF8, "application/json");
+                await client.PostAsync("/api/addNewPet", postBody);
+            }
+
+            //when
+            var response = await client.GetAsync("/api/getPetsByPriceRange?min=500&&max=1700");
+            //then
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var allPets = JsonConvert.DeserializeObject<List<Pet>>(responseBody);
+            Assert.Equal(2, allPets.Count);
         }
     }
 }
