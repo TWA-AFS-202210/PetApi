@@ -23,10 +23,35 @@ namespace PetApi.Controllers
             return pets;
         }
 
+        [HttpGet("getOnePetByName")]
+        public Pet GetOnePetByName(string name)
+        {
+            foreach (var item in pets)
+            {
+                if (item.Name == name)
+                {
+                    return item;
+                }
+            }
+
+            return null;
+        }
+
         [HttpDelete("deleteAllPets")]
         public void DeleteAllPets()
         {
             pets.Clear();
+        }
+
+        [HttpDelete("deleteSelledPet")]
+        public List<Pet> DeleteSelledPet(Pet pet)
+        {
+            if (pets.Contains(pet))
+            {
+                pets.Remove(pet);
+            }
+
+            return pets;
         }
     }
 }
