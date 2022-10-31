@@ -36,6 +36,12 @@ namespace PetApi.Controllers
             return pets.FindAll(x => x.Type == type);
         }
 
+        [HttpGet("getPetsByColor")]
+        public List<Pet> GetPetsByColor(string color)
+        {
+            return pets.FindAll(x => x.Color == color);
+        }
+
         [HttpGet("getPetsByPriceRange")]
         public List<Pet> GetPetsByPriceRange(int min, int max)
         {
