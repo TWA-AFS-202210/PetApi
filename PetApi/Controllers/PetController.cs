@@ -30,6 +30,12 @@ namespace PetApi.Controllers
             return pets.Find(x => x.Name == name);
         }
 
+        [HttpGet("getByType")]
+        public List<Pet> GetByType(string type)
+        {
+            return pets.FindAll(x => x.Type == type);
+        }
+
         [HttpDelete("deleteAllPets")]
         public void DeleteAllPets()
         {

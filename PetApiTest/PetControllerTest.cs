@@ -61,8 +61,6 @@ namespace PetApiTest
             //when
             var pet = new Pet("kitty", "cat", "white", 1000);
             AddOnePet(client, pet);
-            var pet1 = new Pet("Bob", "dog", "white", 2000);
-            AddOnePet(client, pet1);
 
             var response = await client.GetAsync("/api/getOnePetByName?name=kitty");
             //then
@@ -117,6 +115,28 @@ namespace PetApiTest
             var responseBody = await response.Content.ReadAsStringAsync();
             var petEdited = JsonConvert.DeserializeObject<Pet>(responseBody);
             Assert.Equal(2000, petEdited.Price);
+        }
+
+        [Fact]
+        public async void Should_return_all_same_type_pet_when_find_by_type()
+        {
+            //given
+            var application = new WebApplicationFactory<Program>();
+            var client = application.CreateClient();
+            await client.DeleteAsync("/api/deleteAllPets");
+
+            var pet = new Pet("kitty", "cat", "white", 1000);
+            var serialzeObject = JsonConvert.SerializeObject(pet);
+            var postBody = new StringContent(serialzeObject, Encoding.UTF8, "application/json");
+            await client.PostAsync("/api/addNewPet", postBody);
+
+            //when
+            var response = await client.GetAsync("/api/getByType?type=cat");
+            //then
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var allCat = JsonConvert.DeserializeObject<List<Pet>>(responseBody);
+            Assert.Equal(1, allCat.Count);
         }
 
         public void AddOnePet(HttpClient client, Pet pet)
