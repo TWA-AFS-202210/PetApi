@@ -91,7 +91,32 @@ namespace PetApiTest
             response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsStringAsync();
             var allPets = JsonConvert.DeserializeObject<List<Pet>>(responseBody);
-            Assert.Single(allPets);
+            Assert.Equal(0, allPets.Count);
+        }
+
+        [Fact]
+        public async void Should_return_price_after_modify()
+        {
+            //given
+            var application = new WebApplicationFactory<Program>();
+            var client = application.CreateClient();
+            await client.DeleteAsync("/api/deleteAllPets");
+
+            var pet = new Pet("kitty", "cat", "white", 1000);
+            var serialzeObject = JsonConvert.SerializeObject(pet);
+            var postBody = new StringContent(serialzeObject, Encoding.UTF8, "application/json");
+            await client.PostAsync("/api/addNewPet", postBody);
+
+            //when
+            pet.Price = 2000;
+            var serialzeObject1 = JsonConvert.SerializeObject(pet);
+            var postBody1 = new StringContent(serialzeObject1, Encoding.UTF8, "application/json");
+            var response = await client.PatchAsync("/api/editPrice", postBody1);
+            //then
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var petEdited = JsonConvert.DeserializeObject<Pet>(responseBody);
+            Assert.Equal(2000, petEdited.Price);
         }
 
         public void AddOnePet(HttpClient client, Pet pet)

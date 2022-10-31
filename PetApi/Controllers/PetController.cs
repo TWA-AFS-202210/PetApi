@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PetApi.Model;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace PetApi.Controllers
 {
@@ -48,6 +49,21 @@ namespace PetApi.Controllers
             }
 
             return pets;
+        }
+
+        [HttpPatch("editPrice")]
+        public Pet EditPrice(Pet pet)
+        {
+            foreach (var item in pets)
+            {
+                if (item.Name == pet.Name)
+                {
+                    item.Price = pet.Price;
+                    return item;
+                }
+            }
+
+            return null;
         }
     }
 }
