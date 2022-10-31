@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Mvc;
 using PetApi.Models;
 
@@ -32,6 +33,15 @@ namespace PetApi.Controllers
         public void DeleteAllPets()
         {
             pets.Clear();
+        }
+
+        [HttpDelete("deleteByName")]
+        public Pet DeleteByName([FromQuery] string name)
+        {
+            Pet pet = new Pet();
+            pet = pets.Find(item => item.Name == name);
+            pets.Remove(pets.Find(item => item.Name == name));
+            return pet;
         }
     }
 }
