@@ -26,15 +26,7 @@ namespace PetApi.Controllers
         [HttpGet("getOnePetByName")]
         public Pet GetOnePetByName(string name)
         {
-            foreach (var item in pets)
-            {
-                if (item.Name == name)
-                {
-                    return item;
-                }
-            }
-
-            return null;
+            return pets.Find(x => x.Name == name);
         }
 
         [HttpDelete("deleteAllPets")]
@@ -44,11 +36,15 @@ namespace PetApi.Controllers
         }
 
         [HttpDelete("deleteSelledPet")]
-        public List<Pet> DeleteSelledPet(Pet pet)
+        public List<Pet> DeleteSelledPet(string name)
         {
-            if (pets.Contains(pet))
+            foreach (var item in pets)
             {
-                pets.Remove(pet);
+                if (item.Name == name)
+                {
+                    pets.Remove(item);
+                    break;
+                }
             }
 
             return pets;
